@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Сергей Куц — кибербезопасность · развитие продуктовых направлений</title>
+<meta name="description" content="Сергей Куц — 17+ лет в кибербезопасности. Развитие продуктовых направлений, отраслевые фреймворки киберустойчивости, GR, сложные B2B/B2G-сделки.">
+<meta name="theme-color" content="#08090f">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --accent: #5b6cff;
+    --accent-2: #00b3d4;
+    --grad: linear-gradient(135deg, #5b6cff 0%, #00b3d4 100%);
+    --radius: 16px;
+  }
+
+  html[data-theme="light"] {
+    --bg: #eef1f8;
+    --card: #ffffff;
+    --card-2: #f2f4fa;
+    --text: #10131c;
+    --muted: #5d6577;
+    --border: rgba(16, 19, 28, .08);
+    --border-hover: rgba(91, 108, 255, .38);
+    --btn: #f7f8fd;
+    --btn-hover: #ffffff;
+    --chip: rgba(91, 108, 255, .09);
+    --glow-1: rgba(91, 108, 255, .22);
+    --glow-2: rgba(0, 179, 212, .16);
+    --shadow: 0 18px 45px -18px rgba(20, 25, 60, .35);
+    --ring: rgba(255, 255, 255, .9);
+    --ring-2: rgba(91, 108, 255, .18);
+  }
+
+  html[data-theme="dark"] {
+    --bg: #08090f;
+    --card: #11131c;
+    --card-2: #171a26;
+    --text: #eef1f7;
+    --muted: #949cad;
+    --border: rgba(255, 255, 255, .08);
+    --border-hover: rgba(120, 140, 255, .45);
+    --btn: rgba(255, 255, 255, .035);
+    --btn-hover: rgba(255, 255, 255, .075);
+    --chip: rgba(91, 108, 255, .14);
+    --glow-1: rgba(91, 108, 255, .26);
+    --glow-2: rgba(0, 179, 212, .16);
+    --shadow: 0 24px 60px -20px rgba(0, 0, 0, .8);
+    --ring: rgba(20, 24, 36, .95);
+    --ring-2: rgba(91, 108, 255, .28);
+  }
+
+  body {
+    font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 64px 18px 40px;
+    color: var(--text);
+    background:
+      radial-gradient(900px 520px at 50% -8%, var(--glow-1), transparent 70%),
+      radial-gradient(720px 420px at 92% 108%, var(--glow-2), transparent 70%),
+      var(--bg);
+    background-attachment: fixed;
+    transition: background-color .45s ease, color .45s ease;
+    -webkit-font-smoothing: antialiased;
+  }
+  @supports (align-items: safe center) {
+    body { align-items: safe center; }
+  }
+
+  /* ---------- Переключатель темы ---------- */
+  .theme-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 20;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: var(--card);
+    color: var(--text);
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+    box-shadow: 0 8px 22px -10px rgba(0, 0, 0, .45);
+    transition: transform .3s ease, background-color .3s ease, border-color .3s ease;
+  }
+  .theme-toggle:hover { transform: rotate(-14deg) scale(1.07); border-color: var(--border-hover); }
+  .theme-toggle:active { transform: scale(.96); }
+  .theme-toggle svg {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    transition: opacity .3s ease, transform .5s cubic-bezier(.2, .7, .3, 1);
+  }
+  html[data-theme="dark"] .i-sun  { opacity: 1; transform: rotate(0) scale(1); }
+  html[data-theme="dark"] .i-moon { opacity: 0; transform: rotate(-90deg) scale(.5); }
+  html[data-theme="light"] .i-sun  { opacity: 0; transform: rotate(90deg) scale(.5); }
+  html[data-theme="light"] .i-moon { opacity: 1; transform: rotate(0) scale(1); }
+
+  /* ---------- Карточка ---------- */
+  .card {
+    width: 100%;
+    max-width: 432px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 28px;
+    padding: 36px 24px 26px;
+    text-align: center;
+    box-shadow: var(--shadow);
+    position: relative;
+    z-index: 1;
+    animation: rise .7s cubic-bezier(.2, .7, .3, 1) backwards;
+    transition: background-color .45s ease, border-color .45s ease;
+  }
+
+  /* ---------- Аватар ---------- */
+  .avatar {
+    position: relative;
+    width: 132px;
+    height: 132px;
+    margin: 0 auto 22px;
+    border-radius: 50%;
+    padding: 3px;
+    background: var(--grad);
+    box-shadow:
+      0 16px 36px -14px rgba(91, 108, 255, .55),
+      0 0 0 1px var(--ring-2);
+    transition: transform .45s cubic-bezier(.2, .7, .3, 1), box-shadow .45s ease;
+  }
+  .avatar::after {
+    content: "";
+    position: absolute;
+    inset: 3px;
+    border-radius: 50%;
+    box-shadow: inset 0 0 0 2px var(--ring);
+    pointer-events: none;
+  }
+  .avatar:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow:
+      0 22px 44px -14px rgba(91, 108, 255, .7),
+      0 0 0 1px var(--border-hover);
+  }
+  
+  /* ИМЕННО ЗДЕСЬ ВСТАВЛЯЕТСЯ ФОТО */
+  .avatar img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center 22%; /* Центрирует лицо на портрете */
+    display: block;
+    background: var(--card-2);
+  }
+  
+  .avatar img.is-hidden { display: none; }
+  .avatar-fallback {
+    display: none;
+    position: absolute;
+    inset: 3px;
+    border-radius: 50%;
+    background: var(--card-2);
+    place-items: center;
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: .02em;
+    color: var(--text);
+  }
+  .avatar img.is-hidden ~ .avatar-fallback { display: grid; }
+
+  /* ---------- Текст ---------- */
+  h1 {
+    font-size: 1.55rem;
+    font-weight: 700;
+    letter-spacing: -.02em;
+    line-height: 1.25;
+  }
+  .role {
+    margin-top: 8px;
+    font-size: .9rem;
+    font-weight: 500;
+    background: var(--grad);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+  .bio {
+    margin-top: 14px;
+    font-size: .92rem;
+    line-height: 1.62;
+    color: var(--muted);
+  }
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 16px;
+  }
+  .chip {
+    font-size: .73rem;
+    font-weight: 500;
+    padding: 6px 11px;
+    border-radius: 999px;
+    background: var(--chip);
+    color: var(--text);
+    white-space: nowrap;
+  }
+
+  /* ---------- Публикации и выступления ---------- */
+  .pubs {
+    margin-top: 24px;
+    padding-top: 18px;
+    border-top: 1px solid var(--border);
+    text-align: left;
+  }
+  .pubs-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: .7rem;
+    font-weight: 600;
+    letter-spacing: .13em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
+    padding: 0 4px;
+  }
+  .pubs-title::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+  .pub-list { display: flex; flex-direction: column; gap: 2px; }
+
+  .pub {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 9px 8px;
+    border-radius: 12px;
+    transition: background-color .25s ease, transform .25s ease;
+    animation: fadeUp .6s cubic-bezier(.2, .7, .3, 1) backwards;
+  }
+  .pub:hover { background: var(--btn); transform: translateX(2px); }
+
+  .pub-ico {
+    flex: none;
+    width: 30px;
+    height: 30px;
+    border-radius: 9px;
+    display: grid;
+    place-items: center;
+    color: var(--c, var(--accent));
+    background: var(--cbg, var(--chip));
+    transition: transform .25s cubic-bezier(.2, .7, .3, 1);
+  }
+  .pub-ico svg { width: 15px; height: 15px; display: block; }
+  .pub:hover .pub-ico { transform: scale(1.08); }
+
+  .pub-body { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+  .pub-name { font-size: .86rem; font-weight: 600; line-height: 1.3; }
+  .pub-meta { font-size: .74rem; color: var(--muted); line-height: 1.4; }
+
+  .pub-tag {
+    flex: none;
+    margin-left: auto;
+    font-size: .64rem;
+    font-weight: 600;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 3px 8px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    white-space: nowrap;
+  }
+
+  .pub:nth-child(1) { animation-delay: .10s; }
+  .pub:nth-child(2) { animation-delay: .16s; }
+  .pub:nth-child(3) { animation-delay: .22s; }
+  .pub:nth-child(4) { animation-delay: .28s; }
+
+  /* ---------- Кнопки-ссылки ---------- */
+  .links {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 24px;
+    padding-top: 18px;
+    border-top: 1px solid var(--border);
+  }
+  .link {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    padding: 11px 14px;
+    border-radius: var(--radius);
+    background: var(--btn);
+    border: 1px solid var(--border);
+    color: var(--text);
+    text-decoration: none;
+    text-align: left;
+    transition: transform .25s ease, background-color .25s ease,
+                border-color .25s ease, box-shadow .25s ease;
+    animation: fadeUp .6s cubic-bezier(.2, .7, .3, 1) backwards;
+  }
+  .link:hover {
+    transform: translateY(-2px);
+    background: var(--btn-hover);
+    border-color: var(--border-hover);
+    box-shadow: 0 12px 26px -16px rgba(0, 0, 0, .6);
+  }
+  .link:active { transform: translateY(0) scale(.995); }
+  .link:focus-visible,
+  .theme-toggle:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+  .ico {
+    flex: none;
+    width: 38px;
+    height: 38px;
+    border-radius: 12px;
+    display: grid;
+    place-items: center;
+    color: var(--c, var(--accent));
+    background: var(--cbg, var(--chip));
+    transition: transform .25s cubic-bezier(.2, .7, .3, 1);
+  }
+  .ico svg { width: 19px; height: 19px; display: block; }
+  .link:hover .ico { transform: scale(1.08) rotate(-3deg); }
+
+  .txt { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+  .t { font-size: .93rem; font-weight: 600; }
+  .s {
+    font-size: .78rem;
+    color: var(--muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .arr {
+    flex: none;
+    margin-left: auto;
+    color: var(--muted);
+    opacity: 0;
+    transform: translateX(-6px);
+    transition: opacity .25s ease, transform .25s ease;
+  }
+  .link:hover .arr { opacity: .85; transform: translateX(0); }
+
+  .link:nth-child(1) { animation-delay: .34s; }
+  .link:nth-child(2) { animation-delay: .40s; }
+  .link:nth-child(3) { animation-delay: .46s; }
+  .link:nth-child(4) { animation-delay: .52s; }
+
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(22px) scale(.985); }
+    to   { opacity: 1; transform: none; }
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: none; }
+  }
+
+  @media (max-width: 420px) {
+    .card { padding: 30px 16px 22px; border-radius: 24px; }
+    .avatar { width: 116px; height: 116px; }
+    h1 { font-size: 1.4rem; }
+    .theme-toggle { top: 14px; right: 14px; }
+    .pub-tag { display: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: .001ms !important;
+      animation-delay: 0ms !important;
+      transition-duration: .001ms !important;
+    }
+  }
+</style>
+</head>
+<body>
+
+<button class="theme-toggle" id="themeToggle" type="button" aria-label="Переключить тему">
+  <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true">
+    <circle cx="12" cy="12" r="4"/>
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+  </svg>
+  <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z"/>
+  </svg>
+</button>
+
+<main class="card">
+  <div class="avatar">
+    <!-- ЗДЕСЬ ПОДКЛЮЧАЕТСЯ ФОТО -->
+    <img src="avatar.jpg" alt="Сергей Куц" onerror="this.classList.add('is-hidden')">
+    <span class="avatar-fallback" aria-hidden="true">СК</span>
+  </div>
+
+  <h1>Сергей Куц</h1>
+  <p class="role">Развитие продуктовых направлений · Кибербезопасность</p>
+
+  <p class="bio">
+    17+ лет в кибербезопасности. Развиваю продуктовые направления и отраслевые
+    фреймворки киберустойчивости, веду GR-диалог с регуляторами и сложные
+    B2B/B2G-сделки.
+  </p>
+
+  <div class="chips">
+    <span class="chip">КИИ и ГосСОПКА</span>
+    <span class="chip">Киберустойчивость</span>
+    <span class="chip">GR</span>
+    <span class="chip">B2B / B2G</span>
+  </div>
+
+  <!-- ПУБЛИКАЦИИ И ВЫСТУПЛЕНИЯ -->
+  <section class="pubs" aria-labelledby="pubsTitle">
+    <h2 class="pubs-title" id="pubsTitle">Публикации и выступления</h2>
+    <div class="pub-list">
+      <div class="pub">
+        <span class="pub-ico" style="--c:#5b6cff; --cbg:rgba(91,108,255,.14)" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3z"/>
+            <path d="M19 12a7 7 0 0 1-14 0M12 19v3M8.5 22h7"/>
+          </svg>
+        </span>
+        <span class="pub-body">
+          <span class="pub-name">PHDays</span>
+          <span class="pub-meta">Доклад · оценка рисков КИИ и киберустойчивость</span>
+        </span>
+        <span class="pub-tag">Спикер</span>
+      </div>
+      <div class="pub">
+        <span class="pub-ico" style="--c:#00b3d4; --cbg:rgba(0,179,212,.14)" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="4" width="18" height="12" rx="2"/>
+            <path d="M8 20h8M12 16v4"/>
+          </svg>
+        </span>
+        <span class="pub-body">
+          <span class="pub-name">Positive Security Day</span>
+          <span class="pub-meta">Доклад · результативная кибербезопасность</span>
+        </span>
+        <span class="pub-tag">Спикер</span>
+      </div>
+      <div class="pub">
+        <span class="pub-ico" style="--c:#8B5CF6; --cbg:rgba(139,92,246,.16)" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="9"/>
+            <path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/>
+          </svg>
+        </span>
+        <span class="pub-body">
+          <span class="pub-name">Kazan Digital Week</span>
+          <span class="pub-meta">Доклад · центры киберустойчивости для отраслей</span>
+        </span>
+        <span class="pub-tag">Спикер</span>
+      </div>
+      <div class="pub">
+        <span class="pub-ico" style="--c:#F59E0B; --cbg:rgba(245,158,11,.15)" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <path d="M14 2v6h6M8 13h8M8 17h5"/>
+          </svg>
+        </span>
+        <span class="pub-body">
+          <span class="pub-name">D-Russia · PT Research · Safe-surf</span>
+          <span class="pub-meta">Автор экспертных публикаций</span>
+        </span>
+        <span class="pub-tag">Автор</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- КОНТАКТЫ -->
+  <nav class="links" aria-label="Контакты">
+    <a class="link" href="https://t.me/SeRGKuts" target="_blank" rel="noopener" style="--c:#2AABEE; --cbg:rgba(42,171,238,.14)">
+      <span class="ico">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M11.94 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.06 0zm4.96 7.22c.1 0 .32.03.47.14a.5.5 0 0 1 .17.33c.02.09.04.3.02.47-.18 1.9-.96 6.5-1.36 8.63-.17.9-.5 1.2-.82 1.23-.7.06-1.22-.46-1.9-.9-1.06-.7-1.65-1.13-2.68-1.8-1.18-.78-.42-1.21.26-1.91.17-.19 3.25-2.98 3.3-3.23.01-.03.02-.15-.05-.21-.08-.06-.18-.05-.25-.03-.1.03-1.8 1.14-5.06 3.35-.48.33-.91.49-1.3.48-.43 0-1.25-.24-1.87-.44-.75-.25-1.35-.37-1.3-.79.03-.22.33-.44.9-.66 3.5-1.53 5.83-2.53 7-3.02 3.33-1.39 4.02-1.63 4.47-1.64z"/>
+        </svg>
+      </span>
+      <span class="txt">
+        <span class="t">Telegram</span>
+        <span class="s">@SeRGKuts</span>
+      </span>
+      <svg class="arr" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+    </a>
+
+    <a class="link" href="https://t.me/cyberkuts" target="_blank" rel="noopener" style="--c:#8B5CF6; --cbg:rgba(139,92,246,.16)">
+      <span class="ico">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="2.2"/>
+          <path d="M7.8 7.8a6 6 0 0 0 0 8.4M16.2 7.8a6 6 0 0 1 0 8.4M4.9 4.9a10 10 0 0 0 0 14.2M19.1 4.9a10 10 0 0 1 0 14.2"/>
+        </svg>
+      </span>
+      <span class="txt">
+        <span class="t">Telegram-канал</span>
+        <span class="s">@cyberkuts</span>
+      </span>
+      <svg class="arr" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+    </a>
+
+    <a class="link" href="tel:+79262967766" style="--c:#22C55E; --cbg:rgba(34,197,94,.14)">
+      <span class="ico">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/>
+        </svg>
+      </span>
+      <span class="txt">
+        <span class="t">Телефон</span>
+        <span class="s">+7 926 296-77-66</span>
+      </span>
+      <svg class="arr" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+    </a>
+
+    <a class="link" href="https://www.linkedin.com/in/cyberkuts" target="_blank" rel="noopener" style="--c:#0A66C2; --cbg:rgba(10,102,194,.14)">
+      <span class="ico">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/>
+        </svg>
+      </span>
+      <span class="txt">
+        <span class="t">LinkedIn</span>
+        <span class="s">linkedin.com/in/cyberkuts</span>
+      </span>
+      <svg class="arr" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+    </a>
+  </nav>
+</main>
+
+<script>
+  (function () {
+    const root = document.documentElement;
+    const toggle = document.getElementById('themeToggle');
+    const saved = localStorage.getItem('theme');
+    const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+    function apply(theme) {
+      root.setAttribute('data-theme', theme);
+      localStorage.setItem('theme', theme);
+      toggle.setAttribute('aria-label', theme === 'dark'
+        ? 'Включить светлую тему'
+        : 'Включить тёмную тему');
+      const meta = document.querySelector('meta[name="theme-color"]');
+      if (meta) meta.setAttribute('content', theme === 'dark' ? '#08090f' : '#eef1f8');
+    }
+
+    apply(saved || (systemDark ? 'dark' : 'light'));
+
+    toggle.addEventListener('click', function () {
+      apply(root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+    });
+
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function (e) {
+      if (!localStorage.getItem('theme')) apply(e.matches ? 'dark' : 'light');
+    });
+  })();
+</script>
+
+</body>
+</html>
